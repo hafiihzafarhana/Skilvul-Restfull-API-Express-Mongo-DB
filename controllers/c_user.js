@@ -1,6 +1,8 @@
 const UserList = require('./../models/m_user');
 const jwt = require('jsonwebtoken');
 const env = require('dotenv');
+const bcrypt = require('bcryptjs');
+
 env.config();
 const login = async (req, res) => {
     try {
@@ -13,7 +15,7 @@ const login = async (req, res) => {
             });    
         }
         
-        if(user.password == password){
+        if(await bcrypt.compare(password, user.password)){
             const token = jwt.sign({
                     _id: user._id,
                     username: user.username,
@@ -43,7 +45,8 @@ const login = async (req, res) => {
 
 const register = async (req, res) => {
     try {
-        const {name, username, password} = req.body;
+        const {name, username, password:textPass} = req.body;
+        const password = await bcrypt.hash(textPass, 10);
         await UserList.create({
             name, username, password
         }, (err, result) => {

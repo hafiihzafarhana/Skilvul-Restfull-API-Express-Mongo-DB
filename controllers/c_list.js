@@ -74,6 +74,7 @@ const postList = async (req, res) => {
         const subList = {
             title, content
         }
+        console.log(_idUser)
         UserList.updateOne({"_id":_idUser}, {$push:{"list":subList}}, (err,result) => {
             if(err){
                 return res.status(409).json({
@@ -85,7 +86,8 @@ const postList = async (req, res) => {
 
             return res.status(201).json({
                 status:201,
-                message:"You was added a list"
+                message:"You was added a list",
+                data:result
             })
         })
 
