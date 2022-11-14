@@ -2,19 +2,14 @@ const UserList = require('./../models/m_user');
 const jwt = require('jsonwebtoken');
 const env = require('dotenv');
 const bcrypt = require('bcryptjs');
-
+const {res_error, res_success} = require('./../res_validate')
 env.config();
 
 const login = async (req, res) => {
     try {
         const {username, password} = req.body;
         const user = await UserList.findOne({ username }).lean();
-        if(!user){
-            return res.status(404).json({
-                status:404,
-                message:"Your username or password is invalid"
-            });    
-        }
+        if(!user) res_error(res, 409, "error 409","Your username or password is invalid")
         
         if(await bcrypt.compare(password, user.password)){
             const token = jwt.sign({
@@ -24,23 +19,9 @@ const login = async (req, res) => {
                 },process.env.CODE_JWT
             )
 
-            return res.status(201).json({
-                status:201,
-                token,
-                message:"You was login"
-            })
-        }
-
-        return res.status(404).json({
-            status:404,
-            message:"Your username or password is invalid"
-        });
-
+            return res_success(res, 200, "200 Success", "You was login", token)
     } catch (error) {
-        return res.status(409).json({
-            status:409,
-            message:error.message
-        });
+        if(error) res_error(res, 409, "error 409","Your username or password is invalid")
     }
 }
 
@@ -51,22 +32,12 @@ const register = async (req, res) => {
         await UserList.create({
             name, username, password
         }, (err, result) => {
-            if(err){
-                return res.status(409).json({
-                    status:409,
-                    message:err.message
-                });
-            }
-            return res.status(201).json({
-                status:201,
-                message:"Your Account was registered"
-            });
+            if(err) res_error(res, 409, "error 409",err.message)
+                
+            return res_success(res, 200, "200 Success", "Your Account was registered")
         })
     } catch (error) {
-        return res.status(409).json({
-            status:409,
-            message:error.message
-        });
+        if(error) res_error(res, 409, "error 409",error.message)
     }
 }
 
