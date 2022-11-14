@@ -21,7 +21,7 @@
 Request :
 
 - Method : POST
-- Endpoint : /user/register
+- Endpoint : /users/register
 - Header :
   - Content-Type : application/json
   - Accept : application/json
@@ -56,7 +56,7 @@ Request :
 Request :
 
 - Method : POST
-- Endpoint : /user/login
+- Endpoint : /users/login
 - Header :
   - Content-Type : application/json
   - Accept : application/json
@@ -92,7 +92,7 @@ Request :
 ## Retrive All List Datas
 
 - Method : GET
-- Endpoint : /list
+- Endpoint : /lists
 - Header :
   - Accept : application/json
   - authorization : JSON Web Token
@@ -114,7 +114,7 @@ Request :
 ## Retrive List Data By ID
 
 - Method : GET
-- Endpoint : /list/:id
+- Endpoint : /lists/:id
 - Header :
   - Accept : application/json
   - authorization : JSON Web Token
@@ -136,7 +136,7 @@ Request :
 ## Store New List Data
 
 - Method : POST
-- Endpoint : /list
+- Endpoint : /lists
 - Header :
   - Content-Type : application/json
   - Accept : application/json
@@ -167,7 +167,7 @@ Request :
 ## Update List Data By ID
 
 - Method : PUT
-- Endpoint : /list/:id
+- Endpoint : /lists/:id
 - Header :
   - Content-Type : application/json
   - Accept : application/json
@@ -198,7 +198,7 @@ Request :
 ## Delete List Data By ID
 
 - Method : DELETE
-- Endpoint : /list/:id
+- Endpoint : /lists/:id
 - Header :
   - Content-Type : application/json
   - Accept : application/json
@@ -216,7 +216,7 @@ Request :
 ## Delete All List Data
 
 - Method : DELETE
-- Endpoint : /list
+- Endpoint : /lists
 - Header :
   - Content-Type : application/json
   - Accept : application/json
