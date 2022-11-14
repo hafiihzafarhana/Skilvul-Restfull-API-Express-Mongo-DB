@@ -18,8 +18,8 @@ const login = async (req, res) => {
                     name:user.name                    
                 },process.env.CODE_JWT
             )
-
             return res_success(res, 200, "200 OK", "You was login", token)
+        }
     } catch (error) {
         if(error) res_error(res, 500, "500 Internal Server Error", error.message)
     }
@@ -32,12 +32,12 @@ const register = async (req, res) => {
         await UserList.create({
             name, username, password
         }, (err, result) => {
-            if(err) res_error(res, 400, "400 Bad Request", err.message)
+            if(err) return res_error(res, 400, "400 Bad Request", err.message)
 
             return res_success(res, 201, "201 Created", "Your Account was registered")
         })
     } catch (error) {
-        if(error) res_error(res, 500, "500 Internal Server Error",error.message)
+        if(error) return res_error(res, 500, "500 Internal Server Error",error.message)
     }
 }
 
