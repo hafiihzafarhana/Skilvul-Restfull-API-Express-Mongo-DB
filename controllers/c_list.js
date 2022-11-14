@@ -14,22 +14,22 @@ const checkJWT = (req, res, next) => {
         token = auth.split(" ")[1];
         user = jwt.verify(token, process.env.CODE_JWT);
         _idUser = user._id;
-        if(!user) res_error(res, 409, "Error 409", "You haven't been authenticated and authorized")
+        if(!user) res_error(res, 403, "403 Forbidden", "You haven't been authenticated and authorized")
         next()
     } catch (error) {
-        if(error) res_error(res, 409, "Error 409", "There is an error from the server side")
+        if(error) res_error(res, 500, "500 Internal Server Error", "There is an error from the server side")
     }
 }
 
 const getAllList = async (req, res) => {
     try {
         UserList.find({"_id":_idUser}, (err, result) => {
-            if(err) res_error(res, 409, "Error 409", "You can't retrieve all data due to an error from the client side")
+            if(err) res_error(res, 400, "400 Bad Request", "You can't retrieve all data due to an error from the client side")
 
-            return res_success(res, 200, "200 Success", "You retrieve all data", result[0].list)
+            return res_success(res, 200, "200 OK", "You retrieve all data", result[0].list)
         })
     } catch (error) {
-        if(error) res_error(res, 409, "Error 409", "You can't retrieve all data due to an error from the server side")
+        if(error) res_error(res, 500, "500 Internal Server Error", "You can't retrieve all data due to an error from the server side")
     }
 }
 
@@ -40,13 +40,13 @@ const getListById = async (req, res) => {
         
         await UserList.find({"_id":_idUser}, {"list":{$elemMatch:{_id:_idList}}})
         .then((data) => {
-            return res_success(res, 200, "200 Success", "You retrieve data by ID", data[0].list[0])
+            return res_success(res, 200, "200 OK", "You retrieve data by ID", data[0].list[0])
         })
         .catch(() => {
-            return res_error(res, 409, "Error 409", "You can't retrieve data by ID due to an error from the client side")
+            return res_error(res, 400, "400 Bad Request", "You can't retrieve data by ID due to an error from the client side")
         })
     } catch (err) {
-        if(err) res_error(res, 409, "Error 409", "You can't retrieve data by ID due to an error from the server side")
+        if(err) res_error(res, 500, "500 Internal Server Error", "You can't retrieve data by ID due to an error from the server side")
     }
 }
 
@@ -57,14 +57,14 @@ const postList = async (req, res) => {
             title, content
         }
         UserList.updateOne({"_id":_idUser}, {$push:{"list":subList}}, (err,result) => {
-            if(err) res_error(res, 409, "Error 409", "You can't store data due to an error from the client side")
+            if(err) res_error(res, 400, "400 Bad Request", "You can't store data due to an error from the client side")
 
-            return res_success(res, 200, "200 Success", "You store data", subList)
+            return res_success(res, 201, "201 Created", "You store data", subList)
         })
 
     } catch (error) {
         if(error){
-            return res_error(res, 409, "Error 409", "You can't store data due to an error from the server side")
+            return res_error(res, 500, "500 Internal Server Error", "You can't store data due to an error from the server side")
         }
     }
 }
@@ -75,12 +75,12 @@ const updateListById = async (req, res) => {
         const _idList = req.params.id;
 
         UserList.updateOne({"_id":_idUser, "list._id":_idList}, {$set:{"list.$.title":title, "list.$.content":content}}, (err, result) => {
-            if(err) res_error(res, 409, "Error 409", "You can't update data due to an error from the client side")
+            if(err) res_error(res, 400, "400 Bad Request", "You can't update data due to an error from the client side")
 
-            return res_success(res, 200, "200 Success", "You update data by ID", {title, content})
+            return res_success(res, 200, "200 OK", "You update data by ID", {title, content})
         })
     } catch (error) {
-        if(error) res_error(res, 409, "Error 409", "You can't update data due to an error from the server side")
+        if(error) res_error(res, 500, "500 Internal Server Error", "You can't update data due to an error from the server side")
     }
 }
 
@@ -89,24 +89,24 @@ const deleteListById = async (req, res) => {
         const _idList = req.params.id;
 
         UserList.updateOne({"_id":_idUser}, {$pull:{"list":{"_id":_idList}}}, (err, result) => {
-            if(err) res_error(res, 409, "Error 409", "You can't delete data by ID due to an error from the client side")
+            if(err) res_error(res, 400, "400 Bad Request", "You can't delete data by ID due to an error from the client side")
 
-            return res_success(res, 200, "200 Success", "You delete data by ID")
+            return res_success(res, 200, "200 OK", "You delete data by ID")
         })
     } catch (error) {
-        if(error) res_error(res, 409, "Error 409", "You can't delete data by ID due to an error from the server side") 
+        if(error) res_error(res, 500, "500 Internal Server Error", "You can't delete data by ID due to an error from the server side") 
     }
 }
 
 const deleteAllList = async (req, res) => {
     try {
         UserList.updateOne({"_id":_idUser}, {$set:{"list": []}}, (err, result) => {
-            if(err) res_error(res, 409, "Error 409", "You can't delete all data due to an error from the client side")
+            if(err) res_error(res, 400, "400 Bad Request", "You can't delete all data due to an error from the client side")
 
-            return res_success(res, 200, "200 Success", "You delete all data")
+            return res_success(res, 200, "200 OK", "You delete all data")
         })
     } catch (error) {
-        if(error) res_error(res, 409, "Error 409", "You can't delete all data due to an error from the server side")
+        if(error) res_error(res, 500, "500 Internal Server Error", "You can't delete all data due to an error from the server side")
     }
 }
 

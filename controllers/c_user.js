@@ -9,7 +9,7 @@ const login = async (req, res) => {
     try {
         const {username, password} = req.body;
         const user = await UserList.findOne({ username }).lean();
-        if(!user) res_error(res, 409, "error 409","Your username or password is invalid")
+        if(!user) res_error(res, 400, "400 Bad Request", "Your username or password is invalid")
         
         if(await bcrypt.compare(password, user.password)){
             const token = jwt.sign({
@@ -19,9 +19,9 @@ const login = async (req, res) => {
                 },process.env.CODE_JWT
             )
 
-            return res_success(res, 200, "200 Success", "You was login", token)
+            return res_success(res, 200, "200 OK", "You was login", token)
     } catch (error) {
-        if(error) res_error(res, 409, "error 409","Your username or password is invalid")
+        if(error) res_error(res, 500, "500 Internal Server Error", error.message)
     }
 }
 
@@ -32,12 +32,12 @@ const register = async (req, res) => {
         await UserList.create({
             name, username, password
         }, (err, result) => {
-            if(err) res_error(res, 409, "error 409",err.message)
-                
-            return res_success(res, 200, "200 Success", "Your Account was registered")
+            if(err) res_error(res, 400, "400 Bad Request", err.message)
+
+            return res_success(res, 201, "201 Created", "Your Account was registered")
         })
     } catch (error) {
-        if(error) res_error(res, 409, "error 409",error.message)
+        if(error) res_error(res, 500, "500 Internal Server Error",error.message)
     }
 }
 

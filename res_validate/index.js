@@ -14,4 +14,3 @@ const res_success = (res, code, status, message, data) => {
 }
 
 module.exports = {res_error, res_success};
-// check
