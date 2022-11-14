@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const {getAllList, getListById, postList, updateListById, deleteListById, deleteAllList, getAuth} = require('./../controllers/c_list');
+const {getAllList, getListById, postList, updateListById, deleteListById, deleteAllList, checkJWT} = require('./../controllers/c_list');
+
+router.use(checkJWT);
 
 router.get('/', getAllList);
 router.get('/:id', getListById);

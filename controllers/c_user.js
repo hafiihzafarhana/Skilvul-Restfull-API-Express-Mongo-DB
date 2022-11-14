@@ -4,6 +4,7 @@ const env = require('dotenv');
 const bcrypt = require('bcryptjs');
 
 env.config();
+
 const login = async (req, res) => {
     try {
         const {username, password} = req.body;
